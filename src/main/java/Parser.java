@@ -5,6 +5,7 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.Scanner;
 
 public class Parser
 {
@@ -34,19 +35,14 @@ public class Parser
     {
         File input = new File("src/Resources/Video_Games.html");
         Document doc = Jsoup.parse(input, "UTF-8");
-
         Elements gameElements = doc.select("div.col-md-4.game");
-
         for (Element gameElement : gameElements)
         {
             String name = gameElement.select("h3.game-name").text();
-
             String ratingStr = gameElement.select("span.game-rating").text(); // "4.8/5"
             double rating = Double.parseDouble(ratingStr.split("/")[0]);
-
             String priceStr = gameElement.select("span.game-price").text(); // "91 €"
             int price = Integer.parseInt(priceStr.replace("€", "").trim());
-
             Game game = new Game(name, rating, price);
             games.add(game);
         }
@@ -56,18 +52,42 @@ public class Parser
     {
         //you can test your code here before you run the unit tests
         Parser parser = new Parser();
-        try
-        {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
             parser.setUp();
-
-            System.out.println("Games sorted by name:");
-            parser.sortByName().forEach(System.out::println);
-
-            System.out.println("\nGames sorted by rating:");
-            parser.sortByRating().forEach(System.out::println);
-
-            System.out.println("\nGames sorted by price:");
-            parser.sortByPrice().forEach(System.out::println);
+            boolean running = true;
+            while (running)
+            {
+                System.out.println("\n📊 Choose sorting option:");
+                System.out.println("1. Sort by Name");
+                System.out.println("2. Sort by Rating");
+                System.out.println("3. Sort by Price");
+                System.out.println("0. Exit");
+                System.out.print("Enter your choice: ");
+                int choice = scanner.nextInt();
+                switch (choice)
+                {
+                    case 1:
+                        System.out.println("\n\uD83D\uDD24Games sorted by Name:");
+                        parser.sortByName().forEach(System.out::println);
+                        break;
+                    case 2:
+                        System.out.println("\n⭐ Games sorted by Rating:");
+                        parser.sortByRating().forEach(System.out::println);
+                        break;
+                    case 3:
+                        System.out.println("\n\uD83D\uDCB5Games sorted by Price:");
+                        parser.sortByPrice().forEach(System.out::println);
+                        break;
+                    case 0:
+                        System.out.println("👋 bye bye...");
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("❌ Invalid choice. Try again.");
+                }
+            }
 
         }
         catch (IOException e)

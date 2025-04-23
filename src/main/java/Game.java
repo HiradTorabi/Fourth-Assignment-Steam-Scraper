@@ -32,11 +32,11 @@ public class Game
     @Override
     public String toString()
     {
-        return "Game{" +
+        return "Game==>" +
                 "name='" + name + '\'' +
                 ", rating=" + rating +
                 ", price=$" + price +
-                '}';
+                '.';
     }
 
     @Override
